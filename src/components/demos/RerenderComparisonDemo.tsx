@@ -5,7 +5,6 @@ import {
   type RenderSpotlightRole,
 } from "@/components/RenderSpotlight/RenderSpotlight";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, Sparkles } from "lucide-react";
 import React, { createContext, useContext, useRef, useState } from "react";
 
 const SpotlightContext = createContext(true);
@@ -13,6 +12,19 @@ const SpotlightContext = createContext(true);
 function useSpotlightEnabled() {
   return useContext(SpotlightContext);
 }
+
+/** Matches react-rerender problem/solution demo chrome */
+const btn =
+  "rounded-lg border border-[var(--bg-tertiary)] px-3 py-1.5 text-sm text-[var(--text-primary)] transition hover:bg-[var(--bg-tertiary)]";
+
+const panelParent =
+  "rounded-xl border border-[var(--bg-tertiary)] bg-[var(--bg-secondary)] p-6 pt-14 md:p-8 md:pt-[3.25rem]";
+
+const panelChild =
+  "mt-4 rounded-lg border border-[var(--bg-tertiary)] bg-[var(--bg-primary)] p-5 pt-12";
+
+const panelLeaf =
+  "mt-4 rounded-lg border border-[var(--bg-tertiary)] bg-[var(--bg-primary)] p-4 pt-11";
 
 function SomeComponent({ label }: { readonly label: string }) {
   const showSpotlight = useSpotlightEnabled();
@@ -28,14 +40,15 @@ function SomeComponent({ label }: { readonly label: string }) {
       role="leaf"
       label="Inner"
       enabled={showSpotlight}
-      className="mt-4 rounded-xl border border-[var(--bg-tertiary)] border-l-[3px] border-l-rose-400/45 bg-[var(--bg-primary)]/40 p-4 !pt-11 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]"
+      className={panelLeaf}
     >
       <strong className="text-[var(--text-primary)]">{label}</strong>
-      <br />
-      <span className="text-sm text-[var(--text-secondary)]">Render count: </span>
-      <span className="font-mono font-bold text-rose-300">
-        {renderCount.current}
-      </span>
+      <div className="mt-1 text-sm text-[var(--text-secondary)]">
+        Render count:{" "}
+        <span className="font-mono font-semibold text-[var(--info)]">
+          {renderCount.current}
+        </span>
+      </div>
     </RenderSpotlight>
   );
 }
@@ -59,23 +72,25 @@ function ChildWithProps({
       role="child"
       label="Child"
       enabled={showSpotlight}
-      className="rounded-xl border border-[var(--bg-tertiary)] border-l-[3px] border-l-sky-400/45 bg-[var(--bg-secondary)]/90 p-5 !pt-12 shadow-sm"
+      className={panelChild}
     >
-      <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+      <h3 className="text-base font-semibold text-[var(--text-primary)]">
         Child receives a component prop
       </h3>
       <p className="mt-1 text-sm text-[var(--text-secondary)]">
         Child render count:{" "}
-        <strong className="text-sky-200">{renderCount.current}</strong>
+        <span className="font-mono font-semibold text-[var(--info)]">
+          {renderCount.current}
+        </span>
       </p>
-      <p className="text-sm text-[var(--text-muted)]">
+      <p className="mt-1 text-sm text-[var(--text-muted)]">
         React passes <code className="font-mono text-xs">SomeComponent</code> as{" "}
         <code className="font-mono text-xs">ComponentToRender</code>.
       </p>
       <button
         type="button"
         onClick={() => setChildState((s) => s + 1)}
-        className="mt-3 rounded-lg border border-sky-500/20 bg-sky-950/20 px-3 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:border-sky-500/30 hover:bg-sky-950/35"
+        className={`${btn} mt-3`}
       >
         Update child state → {childState}
       </button>
@@ -99,25 +114,30 @@ function ParentWithProps() {
       role="parent"
       label="Parent"
       enabled={showSpotlight}
-      className="rounded-2xl border border-[var(--bg-tertiary)] border-l-[3px] border-l-emerald-400/50 bg-[var(--bg-secondary)]/95 p-6 shadow-md md:p-8 !pt-14"
+      className={panelParent}
     >
-      <h2 className="text-xl font-bold text-[var(--text-primary)]">
+      <h2 className="text-lg font-semibold text-[var(--text-primary)]">
         1. Pass component to Child as a prop
       </h2>
-      <p className="mt-2 max-w-prose text-sm italic leading-snug text-[var(--text-muted)]">
-        Child creates the element each time it renders — Inner (rose) flashes on
-        parent <em>and</em> child updates.
+      <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--text-secondary)]">
+        Child creates the element on each of its renders — Inner flashes on parent{" "}
+        <em>and</em> child updates.
       </p>
-      <p className="mt-3 text-sm text-[var(--text-secondary)]">
-        Parent render count: <strong className="text-emerald-200">{renderCount.current}</strong>
-      </p>
-      <button
-        type="button"
-        onClick={() => setParentState((s) => s + 1)}
-        className="mt-3 rounded-lg border border-emerald-500/25 bg-emerald-950/25 px-4 py-2 text-sm font-medium text-emerald-100/95 transition hover:border-emerald-500/35 hover:bg-emerald-950/40"
-      >
-        Update parent state → {parentState}
-      </button>
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-[var(--text-muted)]">
+          Parent renders:{" "}
+          <span className="font-mono font-semibold text-[var(--info)]">
+            {renderCount.current}
+          </span>
+        </p>
+        <button
+          type="button"
+          onClick={() => setParentState((s) => s + 1)}
+          className={btn}
+        >
+          Update parent state → {parentState}
+        </button>
+      </div>
       <ChildWithProps ComponentToRender={SomeComponent} />
     </RenderSpotlight>
   );
@@ -142,23 +162,25 @@ function ChildWithChildren({
       role="child"
       label="Child"
       enabled={showSpotlight}
-      className="rounded-xl border border-[var(--bg-tertiary)] border-l-[3px] border-l-sky-400/45 bg-[var(--bg-secondary)]/90 p-5 !pt-12 shadow-sm"
+      className={panelChild}
     >
-      <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+      <h3 className="text-base font-semibold text-[var(--text-primary)]">
         Child receives children (elements)
       </h3>
       <p className="mt-1 text-sm text-[var(--text-secondary)]">
         Child render count:{" "}
-        <strong className="text-sky-200">{renderCount.current}</strong>
+        <span className="font-mono font-semibold text-[var(--info)]">
+          {renderCount.current}
+        </span>
       </p>
-      <p className="text-sm text-[var(--text-muted)]">
+      <p className="mt-1 text-sm text-[var(--text-muted)]">
         React passes the tree as the{" "}
         <code className="font-mono text-xs">children</code> prop.
       </p>
       <button
         type="button"
         onClick={() => setChildState((s) => s + 1)}
-        className="mt-3 rounded-lg border border-sky-500/20 bg-sky-950/20 px-3 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:border-sky-500/30 hover:bg-sky-950/35"
+        className={`${btn} mt-3`}
       >
         Update child state → {childState}
       </button>
@@ -182,28 +204,30 @@ function ParentWithChildren() {
       role="parent"
       label="Parent"
       enabled={showSpotlight}
-      className="rounded-2xl border border-[var(--bg-tertiary)] border-l-[3px] border-l-emerald-400/50 bg-[var(--bg-secondary)]/95 p-6 shadow-md md:p-8 !pt-14"
+      className={panelParent}
     >
-      <h2 className="text-xl font-bold text-[var(--text-primary)]">
+      <h2 className="text-lg font-semibold text-[var(--text-primary)]">
         2. Pass component to Child as children
       </h2>
-      <p className="mt-2 max-w-prose text-sm italic leading-snug text-[var(--text-muted)]">
-        Parent owns the element object — try{" "}
-        <strong className="font-medium text-[var(--text-secondary)]">
-          Update child state
-        </strong>{" "}
-        only: Inner often stays quiet; parent updates still refresh it.
+      <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--text-secondary)]">
+        Parent owns the element — try <strong>Update child state</strong> only: Inner
+        often stays quiet; parent updates still refresh it.
       </p>
-      <p className="mt-3 text-sm text-[var(--text-secondary)]">
-        Parent render count: <strong className="text-emerald-200">{renderCount.current}</strong>
-      </p>
-      <button
-        type="button"
-        onClick={() => setParentState((s) => s + 1)}
-        className="mt-3 rounded-lg border border-emerald-500/25 bg-emerald-950/25 px-4 py-2 text-sm font-medium text-emerald-100/95 transition hover:border-emerald-500/35 hover:bg-emerald-950/40"
-      >
-        Update parent state → {parentState}
-      </button>
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-[var(--text-muted)]">
+          Parent renders:{" "}
+          <span className="font-mono font-semibold text-[var(--info)]">
+            {renderCount.current}
+          </span>
+        </p>
+        <button
+          type="button"
+          onClick={() => setParentState((s) => s + 1)}
+          className={btn}
+        >
+          Update parent state → {parentState}
+        </button>
+      </div>
       <ChildWithChildren>
         <SomeComponent label="Component (via children)" />
       </ChildWithChildren>
@@ -230,15 +254,18 @@ const ChildWithMemoProps = React.memo(function ChildWithMemoProps({
       role="memo"
       label="Child (memo)"
       enabled={showSpotlight}
-      className="rounded-xl border border-[var(--bg-tertiary)] border-l-[3px] border-l-violet-400/50 bg-violet-950/20 p-5 !pt-12 shadow-sm"
+      className={panelChild}
     >
-      <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+      <h3 className="text-base font-semibold text-[var(--text-primary)]">
         Same as (1), but Child is wrapped in React.memo
       </h3>
       <p className="mt-1 text-sm text-[var(--text-secondary)]">
-        Child render count: <strong>{renderCount.current}</strong>
+        Child render count:{" "}
+        <span className="font-mono font-semibold text-[var(--info)]">
+          {renderCount.current}
+        </span>
       </p>
-      <p className="text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
         Props shallow-compared; stable{" "}
         <code className="font-mono text-xs">ComponentToRender</code> → parent-only
         updates can bail out.
@@ -246,7 +273,7 @@ const ChildWithMemoProps = React.memo(function ChildWithMemoProps({
       <button
         type="button"
         onClick={() => setChildState((s) => s + 1)}
-        className="mt-3 rounded-lg border border-violet-500/25 bg-violet-950/30 px-3 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:border-violet-500/35 hover:bg-violet-950/45"
+        className={`${btn} mt-3`}
       >
         Update child state → {childState}
       </button>
@@ -270,36 +297,41 @@ function ParentWithMemoProps() {
       role="parent"
       label="Parent"
       enabled={showSpotlight}
-      className="rounded-2xl border border-[var(--bg-tertiary)] border-l-[3px] border-l-emerald-400/50 bg-[var(--bg-secondary)]/95 p-6 shadow-md md:p-8 !pt-14"
+      className={panelParent}
     >
-      <h2 className="text-xl font-bold text-[var(--text-primary)]">
+      <h2 className="text-lg font-semibold text-[var(--text-primary)]">
         3. Pass as prop + wrap Child with React.memo
       </h2>
-      <p className="mt-2 max-w-prose text-sm italic leading-snug text-[var(--text-muted)]">
+      <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--text-secondary)]">
         Props shallow-compared first — stable{" "}
-        <code className="font-mono text-[11px] not-italic">ComponentToRender</code>
-        → parent-only updates skip violet &amp; rose.
+        <code className="font-mono text-[11px]">ComponentToRender</code> → parent-only
+        updates skip memo Child and Inner.
       </p>
-      <p className="mt-3 text-sm text-[var(--text-secondary)]">
-        Parent render count: <strong className="text-emerald-200">{renderCount.current}</strong>
-      </p>
-      <button
-        type="button"
-        onClick={() => setParentState((s) => s + 1)}
-        className="mt-3 rounded-lg border border-emerald-500/25 bg-emerald-950/25 px-4 py-2 text-sm font-medium text-emerald-100/95 transition hover:border-emerald-500/35 hover:bg-emerald-950/40"
-      >
-        Update parent state → {parentState}
-      </button>
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-[var(--text-muted)]">
+          Parent renders:{" "}
+          <span className="font-mono font-semibold text-[var(--info)]">
+            {renderCount.current}
+          </span>
+        </p>
+        <button
+          type="button"
+          onClick={() => setParentState((s) => s + 1)}
+          className={btn}
+        >
+          Update parent state → {parentState}
+        </button>
+      </div>
       <ChildWithMemoProps ComponentToRender={SomeComponent} />
     </RenderSpotlight>
   );
 }
 
 const ROLE_LEGEND: { role: RenderSpotlightRole; text: string }[] = [
-  { role: "parent", text: "Parent — emerald pulse" },
-  { role: "child", text: "Child — sky pulse" },
-  { role: "memo", text: "Memo child — violet pulse" },
-  { role: "leaf", text: "Inner — rose pulse" },
+  { role: "parent", text: "Parent — emerald" },
+  { role: "child", text: "Child — sky" },
+  { role: "memo", text: "Memo child — violet" },
+  { role: "leaf", text: "Inner — rose" },
 ];
 
 export function RerenderComparisonDemo() {
@@ -307,102 +339,56 @@ export function RerenderComparisonDemo() {
 
   return (
     <SpotlightContext.Provider value={spotlightOn}>
-      <div className="mx-auto max-w-3xl space-y-10 px-4 py-6 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
+      <div className="mx-auto max-w-4xl space-y-8 px-6 py-6 md:px-8">
+        <motion.section
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
-          className="overflow-hidden rounded-2xl border border-[var(--bg-tertiary)] bg-[var(--bg-secondary)]/70 p-5 shadow-sm backdrop-blur-sm"
+          transition={{ duration: 0.35 }}
+          className="space-y-4"
         >
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2 text-[var(--text-primary)]">
-              <Sparkles className="h-5 w-5 shrink-0 text-[var(--text-muted)]" aria-hidden />
-              <span className="font-medium tracking-tight">Render spotlight</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setSpotlightOn((v) => !v)}
-              className={`inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition ${
-                spotlightOn
-                  ? "border border-emerald-500/30 bg-emerald-950/30 text-[var(--text-primary)] hover:border-emerald-500/45 hover:bg-emerald-950/45"
-                  : "border border-transparent bg-[var(--bg-tertiary)]/80 text-[var(--text-muted)] hover:border-[var(--bg-tertiary)] hover:text-[var(--text-secondary)]"
-              }`}
-              aria-pressed={spotlightOn}
-            >
-              {spotlightOn ? (
-                <Eye className="h-4 w-4 text-emerald-400/90" aria-hidden />
-              ) : (
-                <EyeOff className="h-4 w-4" aria-hidden />
-              )}
-              {spotlightOn ? "Spotlight on" : "Spotlight off"}
-            </button>
+          <div className="flex flex-wrap items-center gap-6">
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-[var(--text-secondary)]">
+              <input
+                type="checkbox"
+                checked={spotlightOn}
+                onChange={(e) => setSpotlightOn(e.target.checked)}
+                className="rounded border-[var(--bg-tertiary)]"
+              />
+              Flash on re-render
+            </label>
           </div>
-          <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Each boundary flashes when it runs:{" "}
-            <strong className="text-[var(--text-primary)]">Parent</strong> (emerald),{" "}
-            <strong className="text-[var(--text-secondary)]">Child</strong> (sky),{" "}
-            <strong className="text-[var(--text-secondary)]">memo Child</strong>{" "}
-            (violet), <strong className="text-[var(--text-secondary)]">Inner</strong>{" "}
-            (rose). Case 3 skips
-            Child + Inner on parent-only updates — no violet or rose flash.
+          <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+            Each boundary flashes with a 500ms ease-in-out glow (same rhythm as a
+            classic <code className="font-mono text-xs">flash-on-render</code>) —
+            hue encodes role. Case 3 skips memo Child + Inner on parent-only
+            updates.
           </p>
-          <ul className="mt-4 flex flex-wrap gap-2">
+          <ul className="flex flex-wrap gap-2">
             {ROLE_LEGEND.map(({ role, text }) => (
               <li
                 key={role}
-                className="rounded-md border border-[var(--bg-tertiary)]/80 bg-[var(--bg-primary)]/30 px-2.5 py-1 text-[11px] text-[var(--text-muted)]"
+                className="rounded border border-[var(--bg-tertiary)] bg-[var(--bg-secondary)] px-2.5 py-1 text-[11px] text-[var(--text-muted)]"
               >
                 {text}
               </li>
             ))}
           </ul>
-        </motion.div>
+        </motion.section>
 
-        <p className="text-center text-sm leading-relaxed text-[var(--text-secondary)]">
-          Open the console (F12).{" "}
-          <strong className="text-[var(--text-primary)]">1</strong> prop,{" "}
-          <strong className="text-[var(--text-primary)]">2</strong>{" "}
+        <p className="text-center text-sm text-[var(--text-muted)]">
+          Open the console (F12). Scenarios{" "}
+          <span className="font-mono text-[var(--text-secondary)]">1</span> prop,{" "}
+          <span className="font-mono text-[var(--text-secondary)]">2</span>{" "}
           <code className="font-mono text-xs">children</code>,{" "}
-          <strong className="text-[var(--text-primary)]">3</strong>{" "}
-          <code className="font-mono text-xs">memo</code>. Click{" "}
-          <strong className="text-[var(--text-primary)]">Update parent state</strong>
-          : watch emerald → sky → rose in (1)/(2); in (3) memo Child often stays dark
-          (no violet/rose). Click{" "}
-          <strong className="text-[var(--text-primary)]">Update child state</strong>{" "}
-          to pulse that subtree.
+          <span className="font-mono text-[var(--text-secondary)]">3</span>{" "}
+          <code className="font-mono text-xs">memo</code>.
         </p>
 
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: { staggerChildren: 0.08, delayChildren: 0.05 },
-            },
-          }}
-          className="space-y-12"
-        >
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-            transition={{ duration: 0.4 }}
-          >
-            <ParentWithProps />
-          </motion.div>
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-            transition={{ duration: 0.4 }}
-          >
-            <ParentWithChildren />
-          </motion.div>
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-            transition={{ duration: 0.4 }}
-          >
-            <ParentWithMemoProps />
-          </motion.div>
-        </motion.div>
+        <div className="space-y-8">
+          <ParentWithProps />
+          <ParentWithChildren />
+          <ParentWithMemoProps />
+        </div>
       </div>
     </SpotlightContext.Provider>
   );

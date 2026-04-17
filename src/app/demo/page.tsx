@@ -17,27 +17,25 @@ export const metadata: Metadata = {
 
 export default function DemoPage() {
   return (
-    <div className="pb-12 pt-8">
-      <div className="mx-auto max-w-3xl px-6 md:px-8">
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] md:text-3xl">
-          Live demo
-        </h1>
-        <p className="mt-2 max-w-2xl leading-relaxed text-[var(--text-secondary)]">
-          Same buttons everywhere — what changes is{" "}
-          <strong className="text-[var(--text-primary)]">who creates the React
-          element</strong>: Child (prop), Parent (children), or Child behind a{" "}
-          <code className="font-mono text-sm">memo</code> gate. Read the{" "}
-          <a
-            href="/guide"
-            className="text-[#67e8f9] underline-offset-2 hover:underline"
-          >
-            guide
-          </a>{" "}
-          for the full model.
-        </p>
-      </div>
+    <div className="mx-auto max-w-4xl px-6 pb-12 pt-8 md:px-8">
+      <h1 className="bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
+        Live demo
+      </h1>
+      <p className="mt-3 max-w-2xl leading-relaxed text-[var(--text-secondary)]">
+        Same controls in each panel — what changes is{" "}
+        <strong className="text-[var(--text-primary)]">who creates the React element</strong>
+        : Child (prop), Parent (children), or Child behind a{" "}
+        <code className="font-mono text-sm">memo</code> gate. Read the{" "}
+        <a
+          href="/guide"
+          className="text-[#667eea] underline-offset-2 hover:underline"
+        >
+          guide
+        </a>{" "}
+        for the full model.
+      </p>
       <RerenderComparisonDemo />
-      <div className="mx-auto mt-8 flex max-w-3xl justify-end px-6 md:px-8">
+      <div className="mt-10 flex justify-end">
         <NextButton href="/guide" label="How React sees each case" />
       </div>
     </div>
