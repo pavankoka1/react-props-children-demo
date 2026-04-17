@@ -1,0 +1,313 @@
+@import "tailwindcss";
+
+/* Design System - Dark Theme (same as react-rerender) */
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #13131a;
+  --bg-tertiary: #1a1a24;
+
+  --text-primary: #e4e4e7;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+
+  --glow-purple: rgba(102, 126, 234, 0.4);
+  --glow-blue: rgba(79, 172, 254, 0.4);
+  --glow-pink: rgba(245, 87, 108, 0.4);
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+  /* Flame-chart / pipeline accents */
+  --accent-teal: #2dd4bf;
+  --accent-cyan: #22d3ee;
+
+  /* Scrollbar thumb gradient (reused) */
+  --scroll-thumb: linear-gradient(
+    180deg,
+    rgba(102, 126, 234, 0.82) 0%,
+    rgba(118, 75, 162, 0.75) 45%,
+    rgba(79, 172, 254, 0.72) 100%
+  );
+  --scroll-thumb-hover: linear-gradient(
+    180deg,
+    rgba(102, 126, 234, 0.95) 0%,
+    rgba(118, 75, 162, 0.9) 45%,
+    rgba(79, 172, 254, 0.88) 100%
+  );
+}
+
+@theme inline {
+  --font-sans: var(--font-inter, ui-sans-serif), system-ui, sans-serif;
+  --color-bg-primary: #0a0a0f;
+  --color-bg-secondary: #13131a;
+  --color-bg-tertiary: #1a1a24;
+  --color-text-primary: #e4e4e7;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(102, 126, 234, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(102, 126, 234, 0.6);
+  }
+}
+
+@keyframes watcher-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.watcher-lens-spin {
+  transform-origin: 36px 36px;
+  animation: watcher-spin 14s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .watcher-lens-spin {
+    animation: none;
+  }
+}
+
+.flash-on-render {
+  animation: glow 500ms ease-in-out;
+}
+
+/* --- Render spotlight (demo): role-colored one-shot pulses on each render --- */
+@keyframes render-pulse-parent-keyframes {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    filter: brightness(1);
+  }
+  40% {
+    box-shadow:
+      0 0 0 1px rgba(16, 185, 129, 0.35),
+      0 0 20px rgba(16, 185, 129, 0.12);
+    filter: brightness(1.02);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    filter: brightness(1);
+  }
+}
+
+@keyframes render-pulse-child-keyframes {
+  0% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+  }
+  35% {
+    box-shadow:
+      inset 0 0 0 1px rgba(56, 189, 248, 0.28),
+      0 0 18px rgba(56, 189, 248, 0.12);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+  }
+}
+
+@keyframes render-pulse-memo-keyframes {
+  0% {
+    box-shadow: 0 0 0 0 rgba(167, 139, 250, 0);
+  }
+  35% {
+    box-shadow:
+      0 0 0 1px rgba(167, 139, 250, 0.35),
+      0 0 22px rgba(139, 92, 246, 0.14);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(167, 139, 250, 0);
+  }
+}
+
+@keyframes render-pulse-leaf-keyframes {
+  0% {
+    box-shadow: 0 0 0 0 rgba(251, 113, 133, 0);
+  }
+  30% {
+    box-shadow:
+      0 0 0 1px rgba(251, 113, 133, 0.38),
+      0 0 16px rgba(244, 63, 94, 0.12);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 113, 133, 0);
+  }
+}
+
+@keyframes render-dot-pop-keyframes {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  45% {
+    transform: scale(1.35);
+    opacity: 0.92;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-render-dot-pop {
+  animation: render-dot-pop-keyframes 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.render-pulse-parent {
+  animation: render-pulse-parent-keyframes 0.68s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.render-pulse-child {
+  animation: render-pulse-child-keyframes 0.68s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.render-pulse-memo {
+  animation: render-pulse-memo-keyframes 0.72s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.render-pulse-leaf {
+  animation: render-pulse-leaf-keyframes 0.65s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .render-pulse-parent,
+  .render-pulse-child,
+  .render-pulse-memo,
+  .render-pulse-leaf,
+  .animate-render-dot-pop {
+    animation: none !important;
+  }
+}
+
+.code-block {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    monospace;
+}
+
+/* No visible scrollbars; content still scrolls on overflow (keyboard / trackpad). */
+.code-block-pre,
+.code-block-wrap pre {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.code-block-pre::-webkit-scrollbar,
+.code-block-wrap pre::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Single scroll surface: no native page scrollbar (main + nav use .app-scroll). */
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  min-height: 100%;
+  overflow: hidden;
+}
+
+/**
+ * Primary app scrollbar — sidebar + main content only.
+ * Do not rely on default document scroll (avoids double scrollbars with nested panels).
+ */
+.app-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(102, 126, 234, 0.5) var(--bg-secondary);
+  scrollbar-gutter: stable;
+}
+
+.app-scroll::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+.app-scroll::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 9999px;
+}
+
+.app-scroll::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 9999px;
+  border: 2px solid var(--bg-secondary);
+  background-clip: padding-box;
+}
+
+.app-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+}
+
+.app-scroll::-webkit-scrollbar-corner {
+  background: var(--bg-secondary);
+}
+
+/**
+ * Nested panels (demos, cards): thin track, thumb visible on hover so you
+ * don’t stack two loud scrollbars next to the main rail.
+ */
+.scrollbar-panel {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.scrollbar-panel:hover {
+  scrollbar-color: rgba(102, 126, 234, 0.55) transparent;
+}
+
+.scrollbar-panel::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-panel::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+
+.scrollbar-panel::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s ease;
+}
+
+.scrollbar-panel:hover::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-color: var(--bg-tertiary);
+}
+
+.scrollbar-panel:hover::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+}
+
+.scrollbar-panel::-webkit-scrollbar-corner {
+  background: transparent;
+}
