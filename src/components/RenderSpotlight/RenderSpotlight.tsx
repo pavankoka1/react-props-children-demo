@@ -15,26 +15,26 @@ interface RenderSpotlightProps {
   readonly enabled?: boolean;
 }
 
-/** Neutral chrome (react-rerender panels); role = dot hue only */
+/** Refined chips — zinc base + role dot (readable, calm) */
 const ROLE_STYLES: Record<
   RenderSpotlightRole,
   { chip: string; dot: string }
 > = {
   parent: {
-    chip: "border-[var(--bg-tertiary)] bg-[var(--bg-primary)] text-[var(--text-muted)]",
-    dot: "bg-emerald-400",
+    chip: "border border-zinc-600/50 bg-zinc-900/70 text-zinc-300",
+    dot: "bg-emerald-400/90",
   },
   child: {
-    chip: "border-[var(--bg-tertiary)] bg-[var(--bg-primary)] text-[var(--text-muted)]",
-    dot: "bg-sky-400",
+    chip: "border border-zinc-600/50 bg-zinc-900/70 text-zinc-300",
+    dot: "bg-sky-400/90",
   },
   memo: {
-    chip: "border-[var(--bg-tertiary)] bg-[var(--bg-primary)] text-[var(--text-muted)]",
-    dot: "bg-violet-400",
+    chip: "border border-zinc-600/50 bg-zinc-900/70 text-zinc-300",
+    dot: "bg-violet-400/90",
   },
   leaf: {
-    chip: "border-[var(--bg-tertiary)] bg-[var(--bg-primary)] text-[var(--text-muted)]",
-    dot: "bg-rose-400",
+    chip: "border border-zinc-600/50 bg-zinc-900/70 text-zinc-300",
+    dot: "bg-rose-400/90",
   },
 };
 
@@ -75,7 +75,7 @@ export function RenderSpotlight({
     >
       {enabled ? (
         <span
-          className={`pointer-events-none absolute right-3 top-3 z-20 inline-flex items-center gap-1.5 rounded border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider ${styles.chip}`}
+          className={`pointer-events-none absolute right-3 top-3 z-20 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] ${styles.chip}`}
           aria-hidden
         >
           <span

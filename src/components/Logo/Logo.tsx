@@ -10,7 +10,7 @@ const KokaParticleK = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#667eea]/12 via-[#764ba2]/8 to-transparent"
+        className="h-10 w-10 shrink-0 rounded-xl border border-[color:var(--demo-border)] bg-[var(--demo-surface)] ring-1 ring-[color:var(--demo-ring)]"
         aria-hidden
       />
     ),

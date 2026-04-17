@@ -10,7 +10,7 @@ import {
   SITE_TAGLINE,
 } from "@/lib/seo-config";
 import { getSiteUrl } from "@/lib/site-url";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -25,6 +25,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 const siteUrl = getSiteUrl();
+
+export const viewport: Viewport = {
+  themeColor: "#0a0a0f",
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "dark",
+};
 
 const googleVerification =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
@@ -92,6 +99,21 @@ export const metadata: Metadata = {
         },
       }
     : {}),
+  icons: {
+    icon: [{ url: "/icon", sizes: "32x32", type: "image/png" }],
+    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: SITE_NAME,
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  referrer: "origin-when-cross-origin",
   other: {
     "msapplication-TileColor": "#0a0a0f",
     "theme-color": "#0a0a0f",

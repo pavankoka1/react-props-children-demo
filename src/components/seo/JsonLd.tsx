@@ -57,6 +57,12 @@ export function JsonLd() {
         name: SITE_NAME,
         url,
         description: SITE_TAGLINE,
+        logo: {
+          "@type": "ImageObject",
+          url: `${url}/icon`,
+          width: 32,
+          height: 32,
+        },
       },
       {
         "@type": "Person",

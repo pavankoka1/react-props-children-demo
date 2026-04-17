@@ -39,6 +39,19 @@
     rgba(118, 75, 162, 0.9) 45%,
     rgba(79, 172, 254, 0.88) 100%
   );
+
+  /* Shared borders + ambient canvas (theme-aligned with gradient-primary / accent) */
+  --border-subtle: rgba(255, 255, 255, 0.055);
+  --border-accent-soft: rgba(102, 126, 234, 0.22);
+  --theme-brand-rgb: 102, 126, 234;
+  --theme-violet-rgb: 118, 75, 162;
+  --theme-cyan-rgb: 79, 172, 254;
+
+  /* Live demo + logo loading frame — same indigo edge as particle mark */
+  --demo-surface: #13131a;
+  --demo-surface-inner: rgba(10, 10, 15, 0.68);
+  --demo-border: rgba(102, 126, 234, 0.16);
+  --demo-ring: rgba(255, 255, 255, 0.045);
 }
 
 @theme inline {
@@ -63,6 +76,26 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Clear affordance for interactive elements */
+a[href],
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary,
+label:has(input[type="checkbox"]),
+label:has(input[type="radio"]) {
+  cursor: pointer;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
 }
 
 @keyframes glow {

@@ -43,6 +43,8 @@ export function Navigation({ isExpanded, onExpandChange }: NavigationProps) {
       <div className="mb-4 flex w-full items-center justify-start overflow-visible px-3">
         <Link
           href="/"
+          title="Home — Koka"
+          aria-label="Home — Koka · React props, children & memo guide"
           className="flex min-w-0 items-center overflow-visible text-[var(--text-primary)] transition-colors hover:text-[#667eea]"
         >
           <Logo isExpanded={isExpanded} />

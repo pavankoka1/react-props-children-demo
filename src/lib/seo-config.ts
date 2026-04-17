@@ -3,6 +3,8 @@
  * Used by root metadata, route layouts, and structured data.
  */
 export const SITE_NAME = "React Props vs Children";
+/** PWA / manifest / bookmarks */
+export const SITE_SHORT_NAME = "Koka · React";
 export const SITE_TAGLINE =
   "Elements & ownership — prop, children, or memo on Child";
 
@@ -27,6 +29,9 @@ export const GLOBAL_KEYWORDS: readonly string[] = [
   "render props pattern",
   "React 19",
   "front-end performance",
+  "React composition patterns",
+  "props vs children performance",
+  "element identity React",
 ];
 
 export const DEFAULT_DESCRIPTION =
